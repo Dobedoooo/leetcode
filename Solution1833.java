@@ -3,12 +3,14 @@ import java.util.Arrays;
 public class Solution1833 {
     public int maxIceCream(int[] costs, int coins) {
         int[] orderedCosts = countingSort(costs);
-        for(int item: orderedCosts) {
-            if(coins > 0) {
-                coins -= item;
+        int iceCream = 0;
+        for(int i = 0; i < orderedCosts.length; i++) {
+            if(coins >= orderedCosts[i] && orderedCosts[i] != 0) {
+                coins -= orderedCosts[i];
+                iceCream += 1;
             }
         }
-        return 0;
+        return iceCream;
     }
 
     /**
@@ -28,7 +30,7 @@ public class Solution1833 {
         }
         // 排序
         int index = 0;
-        int[] result = new int[maxValue + 1];
+        int[] result = new int[array.length];
         for(int i = 0; i < maxValue + 1; i++) {
             while(count[i] > 0) {
                 result[index] = i;
@@ -41,9 +43,9 @@ public class Solution1833 {
 
 
     public static void main(String[] args) {
-        int[] costs = { 1, 3, 2, 4, 0 };
-        int coins = 7;
-//        System.out.println(new Solution1833().maxIceCream(costs, coins));
+        int[] costs = { 6,2,8,8,5,6,6,2,2,2 };
+        int coins = 77;
+        System.out.println(new Solution1833().maxIceCream(costs, coins));
     }
 
 }
