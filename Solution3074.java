@@ -6,17 +6,16 @@ public class Solution3074 {
         Arrays.sort(capacity);
         int boxNum = 0;
         for(int i = capacity.length - 1; i >= 0; i--) {
-            if(totalApple >= capacity[i]) {
-                boxNum += 1;
-                totalApple -= capacity[i];
-            }
+            boxNum += 1;
+            totalApple -= capacity[i];
+            if(totalApple <= 0) break;
         }
         return boxNum;
     }
 
     public static void main(String[] args) {
-        int[] apple = { 1, 3, 2 };
-        int[] capacity = { 4, 3, 1, 5, 2 };
+        int[] apple = { 1,8,6,8,9,3,3 };
+        int[] capacity = { 10,6,8,7,3,6 };
         System.out.println(new Solution3074().minimumBoxes(apple, capacity));
     }
 }
