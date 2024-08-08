@@ -2,7 +2,10 @@ import java.util.Arrays;
 
 public class Solution3074 {
     public int minimumBoxes(int[] apple, int[] capacity) {
-        int totalApple = Arrays.stream(apple).sum();
+        int totalApple = 0;
+        for(int i = 0; i < apple.length; i++) {
+            totalApple += apple[i];
+        }
         Arrays.sort(capacity);
         int boxNum = 0;
         for(int i = capacity.length - 1; i >= 0; i--) {
