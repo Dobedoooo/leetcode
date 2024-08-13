@@ -2,37 +2,54 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Solution1481 {
-    public int findLeastNumOfUniqueInts(int[] arr, int k) {
+    private int findLeastNumOfUniqueInts(int[] arr, int k) {
         // 记录每个数字出现的次数
-        Map<Integer, Integer> numsCount = new HashMap<>();
-        for(int n: arr) {
-            if(numsCount.containsKey(n)) {
-                numsCount.put(n, numsCount.get(n) + 1);
-            } else {
-                numsCount.put(n, 1);
-            }
-        }
-        int num = numsCount.size();
+        Map<Integer, Integer> numsCountMap = new HashMap<>();
+        for(int n: arr) numsCountMap.put(n, numsCountMap.getOrDefault(n, 0) + 1);
         // 按值从小到大排序
-        List<Map.Entry<Integer, Integer>> entryList = new ArrayList<>(numsCount.entrySet());
-        entryList.sort(Comparator.comparingInt(Map.Entry::getValue));
-        Map<Integer, Integer> linkedNumsCount = new LinkedHashMap<>();
-        for(Map.Entry<Integer, Integer> entry: entryList) {
-            linkedNumsCount.put(entry.getKey(), entry.getValue());
-        }
+        Integer[] numCountValue = numsCountMap.values().toArray(new Integer[0]);
+        Arrays.sort(numCountValue);
         // 贪心：从最少的数开始移除
-        Iterator<Map.Entry<Integer, Integer>> iter = linkedNumsCount.entrySet().iterator();
-        while(iter.hasNext()) {
-            Map.Entry<Integer, Integer> entry = iter.next();
-            if(entry.getValue() > k) break;
-            k -= entry.getValue();
-            num -= 1;
+        int leastNum = numCountValue.length;
+        for(int i = 0; i < numCountValue.length; i++) {
+            if(numCountValue[i] > k) break;
+            k -= numCountValue[i];
+            leastNum -= 1;
         }
-        return num;
+        return leastNum;
+    }
+    private int findLeastNumOfUniqueInts2(int[] arr, int k) {
+        // 计数 计数排序缺点：不适合对大数字进行排序，不适合该题
+        int maxValue = maxValue(arr);
+        int[] count = new int[maxValue + 1];
+        for(int i = 0; i < arr.length; i++) {
+            count[arr[i]] += 1;
+        }
+        // 将各个数的出现次数从大到小排序
+        Arrays.sort(count);
+
+        for(int i = 0; i < count.length; i++) {
+            if(count[i] == 0) continue;
+            if(count[i] > k) break;
+            k -= count[i];
+            count[i] = 0;
+        }
+        int leastNum = 0;
+        for(int i = 0; i < count.length; i++) {
+            if(count[i] == 0) continue;
+            leastNum += 1;
+        }
+        return leastNum;
+    }
+    private static int maxValue(int[] array) {
+        int max = 0;
+        for (int j : array) max = Math.max(max, j);
+        return max;
     }
     public static void main(String[] args) {
-        int[] arr = { 4,3,1,1,3,3,2 };
+        int[] arr = { 1, 2, 3 };
         int k = 3;
         System.out.println(new Solution1481().findLeastNumOfUniqueInts(arr, k));
+//        System.out.println(new Solution1481().findLeastNumOfUniqueInts2(arr, k));
     }
 }
